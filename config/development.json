@@ -1,0 +1,5 @@
+{
+  "backendService": {
+    "url": "localhost:3500"
+  }
+}
