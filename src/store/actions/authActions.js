@@ -23,10 +23,12 @@ export const login = (credentials) => {
     try {
       const response = await axios({
         method: 'post',
-        url: `localhost:3500/users/login`,
+        url: `http://localhost:3500/users/login`,
         data: credentials
       })
-      localStorage.setItem('user', response.body.token)
+      console.log(response)
+      localStorage.setItem('user', response.data.token)
+      localStorage.setItem('userId', response.data.userId)
       dispatch({ type: 'LOGIN_SUCCESS'})
     } catch (err) {
       console.log(err)
