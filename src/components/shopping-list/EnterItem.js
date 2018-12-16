@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { addItem } from '../../store/actions/shoppingListActions'
+import { connect } from 'react-redux'
 
 class EnterItem extends Component {
   state = {
@@ -10,10 +12,11 @@ class EnterItem extends Component {
       [e.target.id]: e.target.value
     })
   }
-  handleSubmit = (e) => {
-    e.preventDefault()
+  handleSubmit = async (e) => {
     console.log(e)
     console.log(this.state)
+    await this.props.addItem(this.state)
+
   }
   render () {
     return (
@@ -25,4 +28,16 @@ class EnterItem extends Component {
   }
 }
 
-export default EnterItem
+const mapStateToProps = (state) => {
+  return {
+    shoppingList: state.shoppingList
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addItem: (itemInfo) => dispatch(addItem(itemInfo))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EnterItem)

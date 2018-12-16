@@ -3,7 +3,6 @@ import axios from 'axios'
 export const register = (credentials) => {
   return async (dispatch) => {
     try {
-      console.log(credentials)
       await axios({
         method: 'post',
         url: `http://localhost:3500/users/register`,
