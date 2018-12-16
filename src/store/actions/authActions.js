@@ -40,6 +40,7 @@ export const login = (credentials) => {
 export const logout = () => {
   return async (dispatch) => {
     localStorage.removeItem('user')
+    localStorage.removeItem('userId')
     dispatch({ type: 'LOGOUT_SUCCESS'})
   }
 }
