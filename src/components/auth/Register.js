@@ -9,6 +9,7 @@ class Register extends Component {
     name: ''
   }
   handleChange = (e) => {
+    console.log(this.props.auth)
     this.setState({
       [e.target.id]: e.target.value
     })

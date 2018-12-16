@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { login } from '../../store/actions/authActions'
+import { Redirect } from 'react-router-dom'
 
 class Login extends Component {
   state = {
@@ -12,11 +13,19 @@ class Login extends Component {
       [e.target.id]: e.target.value
     })
   }
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault()
-    this.props.login(this.state)
+    await this.props.login(this.state)
+    const authenticatedUser = localStorage.getItem('user')
+    if (authenticatedUser) {
+      this.props.history.push('/')
+    }
   }
   render () {
+    const authenticatedUser = localStorage.getItem('user')
+    if (authenticatedUser) {
+      return <Redirect to='/'/>
+    }
     return (
       <div className="container">
         <form className="white" onSubmit={this.handleSubmit}>
