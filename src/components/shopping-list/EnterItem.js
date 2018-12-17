@@ -13,16 +13,16 @@ class EnterItem extends Component {
     })
   }
   handleSubmit = async (e) => {
-    console.log(e)
-    console.log(this.state)
     await this.props.addItem(this.state)
-
+  }
+  componentDidMount = () => {
+    this.nameInput.focus()
   }
   render () {
     return (
       <form className="white" onSubmit={this.handleSubmit}>
         <label htmlFor="name">Add item</label>
-        <input type="text" id="name" onChange={this.handleChange}/>
+        <input type="text" id="name" onChange={this.handleChange} ref={(input) => { this.nameInput = input }}/>
       </form>
     )
   }
