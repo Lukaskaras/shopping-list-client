@@ -1,14 +1,10 @@
 import axios from 'axios'
+import { backendService } from '../../services/backendService'
 
 export const register = (credentials) => {
   return async (dispatch) => {
     try {
-      await axios({
-        method: 'post',
-        url: `http://localhost:3500/users/register`,
-        data: credentials,
-        headers: {'Content-Type': 'application/json'}
-      })
+      await backendService.register(credentials)
       dispatch({ type: 'REGISTER_SUCCESS'})
     } catch (err) {
       console.log(err)
@@ -20,14 +16,7 @@ export const register = (credentials) => {
 export const login = (credentials) => {
   return async (dispatch) => {
     try {
-      const response = await axios({
-        method: 'post',
-        url: `http://localhost:3500/users/login`,
-        data: credentials
-      })
-      console.log(response)
-      localStorage.setItem('user', response.data.token)
-      localStorage.setItem('userId', response.data.userId)
+      await backendService.login(credentials)
       dispatch({ type: 'LOGIN_SUCCESS'})
     } catch (err) {
       console.log(err)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { register } from '../../store/actions/authActions'
+import { Redirect } from 'react-router-dom'
 
 class Register extends Component {
   state = {
@@ -19,6 +20,10 @@ class Register extends Component {
     this.props.register(this.state)
   }
   render () {
+    const authenticatedUser = localStorage.getItem('user')
+    if (authenticatedUser) {
+      return <Redirect to='/'/>
+    }
     return (
       <div className="container">
         <form className="white" onSubmit={this.handleSubmit}>

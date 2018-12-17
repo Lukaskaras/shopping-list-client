@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import { getItems } from '../../services/backendService'
+import { backendService } from '../../services/backendService'
 import EnterItem from './EnterItem'
+import { removeItem } from '../../store/actions/shoppingListActions'
+import { connect } from 'react-redux'
 
 class ShoppingList extends Component {
   state = {
@@ -9,15 +11,19 @@ class ShoppingList extends Component {
     isLoading: false
   }
   async componentDidMount() {
-    console.log('bllll')
     this.setState({ isLoading: true})
-    const items = await getItems()
-    console.log(localStorage.getItem('user'))
-    console.log(items)
+    const items = await backendService.getItems()
     this.setState({
       listItems: items,
       isLoading: false
     })
+  }
+  handleClick = async (itemId) => {
+    await this.props.removeItem(itemId)
+    if (this.props.successfulDelete) {
+      const newItems = this.state.listItems.filter(item => item._id !== itemId)
+      this.setState({ listItems: newItems })
+    }
   }
   render() {
     const authenticatedUser = localStorage.getItem('user')
@@ -28,10 +34,15 @@ class ShoppingList extends Component {
     if (this.state.isLoading) {
       return <p className="center">Loading...</p>
     }
-
-    const items = this.state.listItems ? this.state.listItems.map(item => {
+    const items = this.state.listItems.length ? this.state.listItems.map(item => {
       return(
-        <li className="collection-item" key={ item._id }>{item.name}</li>
+        <li className="collection-item" key={ item._id }>
+          <div>{item.name}
+            <a href="javascript:void(0)" className="secondary-content" onClick={() => this.handleClick(item._id)} >
+              <i className="material-icons icon-black">delete</i>
+            </a>
+          </div>
+        </li>
       )
     }) : <div className="center">No items</div>
     return (
@@ -45,4 +56,17 @@ class ShoppingList extends Component {
   }
 }
 
-export default ShoppingList
+const mapStateToProps = (state) => {
+  return {
+    shoppingList: state.shoppingList,
+    successfulDelete: state.shoppingList.successfulDelete
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeItem: (itemId) => dispatch(removeItem(itemId))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShoppingList)
