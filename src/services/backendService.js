@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const getItems = async () => {
   try {
+    console.log(process.env.REACT_APP_BACKEND)
     const token = localStorage.getItem('user')
     const userId = localStorage.getItem('userId')
     const response =  await axios({
