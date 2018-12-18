@@ -6,7 +6,7 @@ const getItems = async () => {
     const userId = localStorage.getItem('userId')
     const response =  await axios({
       method: 'get',
-      url: `http://localhost:3500/items/${userId}`,
+      url: `${process.env.REACT_APP_BACKEND}/items/${userId}`,
       headers: { 'x-access-token': token }
     })
     return response.data
@@ -25,7 +25,7 @@ const postItem = async (itemInfo) => {
     const userId = localStorage.getItem('userId')
     const response = await axios({
       method: 'post',
-      url: 'http://localhost:3500/items/',
+      url: `${process.env.REACT_APP_BACKEND}/items/`,
       headers: { 'x-access-token': token },
       data: {
         ...itemInfo,
@@ -48,7 +48,7 @@ const deleteItem = async (itemId) => {
     const token = localStorage.getItem('user')
     const response = await axios({
       method: 'delete',
-      url: `http://localhost:3500/items/${itemId}`,
+      url: `${process.env.REACT_APP_BACKEND}/items/${itemId}`,
       headers: { 'x-access-token': token }
     })
     return response.data
@@ -65,7 +65,7 @@ const login = async (credentials) => {
   try {
     const response = await axios({
       method: 'post',
-      url: `http://localhost:3500/users/login`,
+      url: `${process.env.REACT_APP_BACKEND}/users/login`,
       data: credentials,
       headers: {'Content-Type': 'application/json'}
     })
@@ -81,7 +81,7 @@ const register = async (credentials) => {
   try {
     const response = await axios({
       method: 'post',
-      url: `http://localhost:3500/users/register`,
+      url: `${process.env.REACT_APP_BACKEND}/users/register`,
       data: credentials,
       headers: {'Content-Type': 'application/json'}
     })
