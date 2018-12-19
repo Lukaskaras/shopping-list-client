@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const getItems = async () => {
   try {
-    console.log(process.env.REACT_APP_BACKEND)
     const token = localStorage.getItem('user')
     const userId = localStorage.getItem('userId')
     const response =  await axios({
@@ -12,7 +11,6 @@ const getItems = async () => {
     })
     return response.data
   } catch (err) {
-    console.log(err)
     if (err.response.status === 401) {
       localStorage.removeItem('user')
       localStorage.removeItem('userId')
@@ -33,10 +31,8 @@ const postItem = async (itemInfo) => {
         userId
       }
     })
-    console.log(response)
     return response.data
   } catch (err) {
-    console.log(err)
     if (err.response.status === 401) {
       localStorage.removeItem('user')
       localStorage.removeItem('userId')
@@ -54,7 +50,6 @@ const deleteItem = async (itemId) => {
     })
     return response.data
   } catch (err) {
-    console.log(err)
     if (err.response.status === 401) {
       localStorage.removeItem('user')
       localStorage.removeItem('userId')
@@ -70,26 +65,21 @@ const login = async (credentials) => {
       data: credentials,
       headers: {'Content-Type': 'application/json'}
     })
-    console.log(response)
     localStorage.setItem('user', response.data.token)
     localStorage.setItem('userId', response.data.userId)
+    return response
   } catch (err) {
-    console.log(err)
+    return err
   }
 }
 
 const register = async (credentials) => {
-  try {
-    const response = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_BACKEND}/users/register`,
-      data: credentials,
-      headers: {'Content-Type': 'application/json'}
-    })
-    console.log(response)
-  } catch (err) {
-    console.log(err)
-  }
+  return await axios({
+    method: 'post',
+    url: `${process.env.REACT_APP_BACKEND}/users/register`,
+    data: credentials,
+    headers: {'Content-Type': 'application/json'}
+  })
 }
 
 export const backendService = {
