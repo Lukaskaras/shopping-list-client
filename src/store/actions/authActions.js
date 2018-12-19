@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { backendService } from '../../services/backendService'
 
 export const register = (credentials) => {
@@ -7,8 +6,7 @@ export const register = (credentials) => {
       await backendService.register(credentials)
       dispatch({ type: 'REGISTER_SUCCESS'})
     } catch (err) {
-      console.log(err)
-      dispatch({ type: 'REGISTER_ERROR'})
+      dispatch({ type: 'REGISTER_ERROR', err })
     }
   }
 }

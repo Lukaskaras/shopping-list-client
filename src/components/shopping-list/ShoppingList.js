@@ -12,12 +12,17 @@ class ShoppingList extends Component {
   }
   async componentDidMount() {
     this.setState({ isLoading: true})
+    await this.loadItems()
+    this.setState({ isLoading: false})
+  }
+
+  async loadItems() {
     const items = await backendService.getItems()
     this.setState({
-      listItems: items,
-      isLoading: false
+      listItems: items
     })
   }
+
   handleClick = async (itemId) => {
     await this.props.removeItem(itemId)
     if (this.props.successfulDelete) {
@@ -50,7 +55,7 @@ class ShoppingList extends Component {
         <ul className="collection">
           {items}
         </ul>
-        <EnterItem/>
+        <EnterItem loadItems={this.loadItems.bind(this)}/>
       </div>
     )
   }

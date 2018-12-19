@@ -13,7 +13,13 @@ class EnterItem extends Component {
     })
   }
   handleSubmit = async (e) => {
-    await this.props.addItem(this.state)
+    e.preventDefault()
+    if (this.state.name.length > 1) {
+      await this.props.addItem(this.state)
+      this.setState({ name: '' })
+      this.nameInput.value = ''
+      await this.props.loadItems()
+    }
   }
   componentDidMount = () => {
     this.nameInput.focus()
@@ -22,7 +28,7 @@ class EnterItem extends Component {
     return (
       <form className="white" onSubmit={this.handleSubmit}>
         <label htmlFor="name">Add item</label>
-        <input type="text" id="name" onChange={this.handleChange} ref={(input) => { this.nameInput = input }}/>
+        <input type="text" id="name" autoComplete="off" onChange={this.handleChange} ref={(input) => { this.nameInput = input }}/>
       </form>
     )
   }
