@@ -7,7 +7,10 @@ const authReducer = (state = initState, action) => {
   switch(action.type) {
     case 'LOGIN_ERROR':
       console.log('loginerror')
-      return state
+      return {
+        ...state,
+        authError: action.err.response.data.message
+      }
     case 'LOGIN_SUCCESS':
       console.log('loginsuccess')
       return state

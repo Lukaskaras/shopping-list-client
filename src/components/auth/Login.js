@@ -6,21 +6,39 @@ import { Redirect } from 'react-router-dom'
 class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    authError: ''
   }
   handleChange = (e) => {
     this.setState({
       [e.target.id]: e.target.value
     })
   }
-  handleSubmit = async (e) => {
-    e.preventDefault()
-    await this.props.login(this.state)
-    const authenticatedUser = localStorage.getItem('user')
-    if (authenticatedUser) {
-      this.props.history.push('/')
+
+  validateForm = () => {
+    if (this.state.email.length === 0) {
+      this.setState({ authError: 'Please fill out email' })
+    } else if (this.state.password.length === 0) {
+      this.setState({ authError: 'Please fill out password' })
     }
   }
+
+  handleSubmit = async (e) => {
+    e.preventDefault()
+    await this.setState({ authError: '' })
+    this.validateForm()
+    if (!this.state.authError) {
+      await this.props.login({ email: this.state.email, password: this.state.password })
+      if (this.props.authError) {
+        this.setState({ authError: this.props.authError })
+      }
+      const authenticatedUser = localStorage.getItem('user')
+      if (authenticatedUser) {
+        this.props.history.push('/')
+      }
+    }
+  }
+
   render () {
     const authenticatedUser = localStorage.getItem('user')
     if (authenticatedUser) {
@@ -40,6 +58,9 @@ class Login extends Component {
           </div>
           <div className="input-field">
             <button className="btn red lighten-1 z-depth-0">Login</button>
+            <div className='red-text center'>
+              { this.state.authError ? <p>{ this.state.authError }</p> : null }
+            </div>
           </div>
         </form>
       </div>
@@ -49,12 +70,15 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    authError: state.auth.authError
   }
 }
+
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (credentials) => dispatch(login(credentials))
   }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

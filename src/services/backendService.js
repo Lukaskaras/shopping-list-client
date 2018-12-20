@@ -58,19 +58,15 @@ const deleteItem = async (itemId) => {
 }
 
 const login = async (credentials) => {
-  try {
-    const response = await axios({
+  const response = await axios({
       method: 'post',
       url: `${process.env.REACT_APP_BACKEND}/users/login`,
       data: credentials,
       headers: {'Content-Type': 'application/json'}
-    })
-    localStorage.setItem('user', response.data.token)
-    localStorage.setItem('userId', response.data.userId)
-    return response
-  } catch (err) {
-    return err
-  }
+  })
+  localStorage.setItem('user', response.data.token)
+  localStorage.setItem('userId', response.data.userId)
+  return response
 }
 
 const register = async (credentials) => {
