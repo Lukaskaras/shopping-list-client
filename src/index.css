@@ -37,3 +37,7 @@ code {
 i.icon-black {
     color: #424242;
 }
+
+.submit-button {
+    margin-top: 0px;
+}
