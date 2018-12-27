@@ -26,10 +26,10 @@ class EnterItem extends Component {
   }
   render () {
     return (
-      <div className="row">
+      <div className="row enter-item">
         <form className="white" onSubmit={this.handleSubmit}>
           <div className="row">
-            <div className="input-field col l12 m11 s9">
+            <div className="input-field col l12 m10 s9">
               <label htmlFor="name">Add item</label>
               <input type="text" id="name" autoComplete="off" onChange={this.handleChange} ref={(input) => { this.nameInput = input }}/>
             </div>

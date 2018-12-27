@@ -7,7 +7,7 @@ body {
   background-color: #ffebee;
 }
 
-.shopping-list {
+.main-container {
   padding: 20px;
   margin-top: 20px;
 }
@@ -41,3 +41,17 @@ i.icon-black {
 .submit-button {
     margin-top: 0px;
 }
+
+.favorites {
+    margin-top: 8.5px;
+}
+
+.enter-item {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.shopping-list-item::after {
+    display: inline-block;
+}
+
