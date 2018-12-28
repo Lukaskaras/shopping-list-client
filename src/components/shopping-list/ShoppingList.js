@@ -4,6 +4,7 @@ import { backendService } from '../../services/backendService'
 import EnterItem from './EnterItem'
 import { removeItem } from '../../store/actions/shoppingListActions'
 import { connect } from 'react-redux'
+import Favorites from './Favorites'
 
 class ShoppingList extends Component {
   state = {
@@ -44,15 +45,14 @@ class ShoppingList extends Component {
         <li className="collection-item row shopping-list-item" key={ item._id }>
           <div className="col s1">
             <a href="javascript:void(0)">
-              <i className="material-icons icon-black">favorite_border</i>
+              <i className="material-icons icon-black">star_border</i>
             </a>
           </div>
           <div className="col s11">
-            <span className="bla">{item.name}</span>
+            <span>{item.name}</span>
             <a href="javascript:void(0)" className="secondary-content" onClick={() => this.handleClick(item._id)} >
               <i className="material-icons icon-black">delete</i>
             </a>
-
           </div>
         </li>
       )
@@ -62,16 +62,12 @@ class ShoppingList extends Component {
         <div className="row">
           <div className="col m9 s12 shopping-list">
             <ul className="collection">
-              {items}
+              { items }
             </ul>
             <EnterItem loadItems={this.loadItems.bind(this)}/>
           </div>
          <div className="col m3 s12 white favorites">
-           <h5 className="center">Most used</h5>
-           <ul className="collection">
-             <li className="collection-item">item</li>
-             <li className="collection-item">item</li>
-           </ul>
+           <Favorites/>
          </div>
         </div>
       </div>

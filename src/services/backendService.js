@@ -78,10 +78,29 @@ const register = async (credentials) => {
   })
 }
 
+const getFavorites = async () => {
+  try {
+    const token = localStorage.getItem('user')
+    const userId = localStorage.getItem('userId')
+    const response =  await axios({
+      method: 'get',
+      url: `${process.env.REACT_APP_BACKEND}/favorites/${userId}`,
+      headers: { 'x-access-token': token }
+    })
+    return response.data
+  } catch (err) {
+    if (err.response.status === 401) {
+      localStorage.removeItem('user')
+      localStorage.removeItem('userId')
+    }
+  }
+}
+
 export const backendService = {
   getItems,
   postItem,
   deleteItem,
   login,
-  register
+  register,
+  getFavorites
 }
