@@ -13,11 +13,11 @@ class ShoppingList extends Component {
   }
   async componentDidMount() {
     this.setState({ isLoading: true})
-    await this.loadItems()
+    await this.loadListItems()
     this.setState({ isLoading: false})
   }
 
-  async loadItems() {
+  async loadListItems() {
     const items = await backendService.getItems()
     this.setState({
       listItems: items
@@ -31,6 +31,7 @@ class ShoppingList extends Component {
       this.setState({ listItems: newItems })
     }
   }
+
   render() {
     const authenticatedUser = localStorage.getItem('user')
     if (!authenticatedUser) {
@@ -40,17 +41,18 @@ class ShoppingList extends Component {
     if (this.state.isLoading) {
       return <p className="center">Loading...</p>
     }
-    const items = this.state.listItems.length ? this.state.listItems.map(item => {
+    console.log(this.state)
+    const items = this.state.listItems.length ? this.state.listItems.map(listItem => {
       return(
-        <li className="collection-item row shopping-list-item" key={ item._id }>
+        <li className="collection-item row shopping-list-item" key={ listItem._id }>
           <div className="col s1">
             <a href="javascript:void(0)">
               <i className="material-icons icon-black">star_border</i>
             </a>
           </div>
           <div className="col s11">
-            <span>{item.name}</span>
-            <a href="javascript:void(0)" className="secondary-content" onClick={() => this.handleClick(item._id)} >
+            <span>{listItem.item.name}</span>
+            <a href="javascript:void(0)" className="secondary-content" onClick={() => this.handleClick(listItem._id)} >
               <i className="material-icons icon-black">delete</i>
             </a>
           </div>
@@ -61,12 +63,12 @@ class ShoppingList extends Component {
       <div className="container main-container">
         <div className="row">
           <div className="col m9 s12 shopping-list">
-            <ul className="collection">
+            <ul className="collection z-depth-1">
               { items }
             </ul>
-            <EnterItem loadItems={this.loadItems.bind(this)}/>
+            <EnterItem loadListItems={this.loadListItems.bind(this)}/>
           </div>
-         <div className="col m3 s12 white favorites">
+         <div className="col m3 s12 white favorites z-depth-1">
            <Favorites/>
          </div>
         </div>

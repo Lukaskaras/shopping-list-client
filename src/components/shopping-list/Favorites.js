@@ -33,7 +33,7 @@ class Favorites extends Component {
     }) : <div className="center">No items</div>
     return (
       <div>
-        <h5 className="center">Most used</h5>
+        <h5 className="center">Favorites</h5>
         <ul className="collection">
           { favorites }
         </ul>

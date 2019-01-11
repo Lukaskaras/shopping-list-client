@@ -1,19 +1,39 @@
 import axios from 'axios'
 
+const logUserOut = () => {
+  localStorage.removeItem('user')
+  localStorage.removeItem('userId')
+}
+
 const getItems = async () => {
   try {
     const token = localStorage.getItem('user')
     const userId = localStorage.getItem('userId')
     const response =  await axios({
       method: 'get',
-      url: `${process.env.REACT_APP_BACKEND}/items/${userId}`,
+      url: `${process.env.REACT_APP_BACKEND}/list-items/${userId}`,
       headers: { 'x-access-token': token }
     })
     return response.data
   } catch (err) {
     if (err.response.status === 401) {
-      localStorage.removeItem('user')
-      localStorage.removeItem('userId')
+      logUserOut()
+    }
+  }
+}
+
+const getAutoCompleteData = async (query) => {
+  try {
+    const token = localStorage.getItem('user')
+    const response = await axios({
+      method: 'get',
+      url: `${process.env.REACT_APP_BACKEND}/items/search?query=${query}`,
+      headers: { 'x-access-token': token }
+    })
+    return response.data
+  } catch (err) {
+    if (err.response.status === 401) {
+      logUserOut()
     }
   }
 }
@@ -22,20 +42,24 @@ const postItem = async (itemInfo) => {
   try {
     const token = localStorage.getItem('user')
     const userId = localStorage.getItem('userId')
+    const { name, _id, quantity } = itemInfo
     const response = await axios({
       method: 'post',
-      url: `${process.env.REACT_APP_BACKEND}/items/`,
+      url: `${process.env.REACT_APP_BACKEND}/list-items/`,
       headers: { 'x-access-token': token },
       data: {
-        ...itemInfo,
-        userId
+        item: {
+          name,
+          itemId: _id
+        },
+        userId,
+        quantity
       }
     })
     return response.data
   } catch (err) {
     if (err.response.status === 401) {
-      localStorage.removeItem('user')
-      localStorage.removeItem('userId')
+      logUserOut()
     }
   }
 }
@@ -45,14 +69,13 @@ const deleteItem = async (itemId) => {
     const token = localStorage.getItem('user')
     const response = await axios({
       method: 'delete',
-      url: `${process.env.REACT_APP_BACKEND}/items/${itemId}`,
+      url: `${process.env.REACT_APP_BACKEND}/list-items/${itemId}`,
       headers: { 'x-access-token': token }
     })
     return response.data
   } catch (err) {
     if (err.response.status === 401) {
-      localStorage.removeItem('user')
-      localStorage.removeItem('userId')
+     logUserOut()
     }
   }
 }
@@ -90,8 +113,7 @@ const getFavorites = async () => {
     return response.data
   } catch (err) {
     if (err.response.status === 401) {
-      localStorage.removeItem('user')
-      localStorage.removeItem('userId')
+      logUserOut()
     }
   }
 }
@@ -102,5 +124,6 @@ export const backendService = {
   deleteItem,
   login,
   register,
-  getFavorites
+  getFavorites,
+  getAutoCompleteData
 }
