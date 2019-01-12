@@ -1,19 +1,6 @@
 import React, { Component } from 'react'
 
 class Favorites extends Component {
-  // async componentDidMount () {
-  //   this.setState({ isLoading: true})
-  //   await this.loadFavorites()
-  //   this.setState({ isLoading: false})
-  // }
-
-  // async loadFavorites() {
-  //   const favorites = await backendService.getFavorites()
-  //   this.setState({
-  //     favorites
-  //   })
-  // }
-
   render () {
     if (this.props.isLoading) {
       return <p className="center">Loading...</p>
