@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const logUserOut = () => {
-  localStorage.removeListItem('user')
-  localStorage.removeListItem('userId')
+  localStorage.removeItem('user')
+  localStorage.removeItem('userId')
 }
 
 const getItems = async () => {
