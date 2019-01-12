@@ -52,12 +52,8 @@ class EnterItem extends Component {
       await this.props.loadListItems()
     }
   }
-  componentDidMount = () => {
-    // this.nameInput.focus()
-  }
 
   render () {
-
     return (
       <div className="row enter-item">
         <form className="white z-depth-1" onSubmit={this.handleSubmit}>
