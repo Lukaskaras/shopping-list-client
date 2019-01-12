@@ -70,7 +70,7 @@ class ShoppingList extends Component {
         <i className="material-icons icon-black">star</i> :
         <i className="material-icons icon-black">star_border</i>
       return(
-        <li className="collection-item row shopping-list-item" key={ listItem._id }>
+        <li className="collection-item row item" key={ listItem._id }>
           <div className="col s1">
             <a href="javascript:void(0)" onClick={() => this.handleClickStar(listItem)}>
               { icon }
@@ -94,8 +94,14 @@ class ShoppingList extends Component {
             </ul>
             <EnterItem loadListItems={this.loadListItems.bind(this)} listItems={this.state.listItems} />
           </div>
-         <div className="col m3 s12 white favorites z-depth-1">
-           <Favorites favorites={this.state.favorites} isLoading={this.state.isFavoritesLoading} />
+         <div className="col m3 s12 white favorites container z-depth-1">
+           <Favorites
+             favorites={this.state.favorites}
+             isLoading={this.state.isFavoritesLoading}
+             loadListItems={this.loadListItems.bind(this)}
+             listItems={this.state.listItems}
+             loadFavorites={this.loadFavorites.bind(this)}
+           />
          </div>
         </div>
       </div>

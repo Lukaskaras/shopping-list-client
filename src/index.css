@@ -60,6 +60,14 @@ i.icon-black {
     display: inline-block;
 }
 
+.favorite-item::after {
+    display: inline-block;
+}
+
+.item::after {
+    display: inline-block;
+}
+
 .highlighted {
     color: white;
 }
