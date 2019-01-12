@@ -28,7 +28,7 @@ class Favorites extends Component {
 
     const favorites = this.props.favorites.length ? this.props.favorites.map(favorite => {
       return(
-        <li className="collection-item row item" key={ favorite.item._id }>
+        <li className="collection-item row item" key={ favorite.item.itemId }>
           <div className="col s2">
             <a href="javascript:void(0)" onClick={() => this.handleAddClick(favorite)}>
               <i className="material-icons icon-black">add_circle</i>
