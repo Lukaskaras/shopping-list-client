@@ -1,33 +1,28 @@
 import React, { Component } from 'react'
-import { backendService } from '../../services/backendService'
 
 class Favorites extends Component {
-  state = {
-    favorites: [],
-    isLoading: false
-  }
-  async componentDidMount () {
-    this.setState({ isLoading: true})
-    await this.loadFavorites()
-    this.setState({ isLoading: false})
-  }
+  // async componentDidMount () {
+  //   this.setState({ isLoading: true})
+  //   await this.loadFavorites()
+  //   this.setState({ isLoading: false})
+  // }
 
-  async loadFavorites() {
-    const favorites = await backendService.getFavorites()
-    this.setState({
-      favorites
-    })
-  }
+  // async loadFavorites() {
+  //   const favorites = await backendService.getFavorites()
+  //   this.setState({
+  //     favorites
+  //   })
+  // }
 
   render () {
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return <p className="center">Loading...</p>
     }
 
-    const favorites = this.state.favorites.length ? this.state.favorites.map(favorite => {
+    const favorites = this.props.favorites.length ? this.props.favorites.map(favorite => {
       return(
-        <li className="collection-item" key={ favorite._id }>
-          <span>{favorite.name}</span>
+        <li className="collection-item" key={ favorite.item._id }>
+          <span>{favorite.item.name}</span>
         </li>
       )
     }) : <div className="center">No items</div>

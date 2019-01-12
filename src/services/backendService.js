@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const logUserOut = () => {
-  localStorage.removeItem('user')
-  localStorage.removeItem('userId')
+  localStorage.removeListItem('user')
+  localStorage.removeListItem('userId')
 }
 
 const getItems = async () => {
@@ -38,7 +38,24 @@ const getAutoCompleteData = async (query) => {
   }
 }
 
-const postItem = async (itemInfo) => {
+const postItem = async (name) => {
+  try {
+    const token = localStorage.getItem('user')
+    const response = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_BACKEND}/items`,
+      headers: { 'x-access-token': token },
+      data: { name }
+    })
+    return response.data
+  } catch (err) {
+    if (err.response.status === 401) {
+      logUserOut()
+    }
+  }
+}
+
+const postListItem = async (itemInfo) => {
   try {
     const token = localStorage.getItem('user')
     const userId = localStorage.getItem('userId')
@@ -64,7 +81,7 @@ const postItem = async (itemInfo) => {
   }
 }
 
-const deleteItem = async (itemId) => {
+const deleteListItem = async (itemId) => {
   try {
     const token = localStorage.getItem('user')
     const response = await axios({
@@ -118,12 +135,56 @@ const getFavorites = async () => {
   }
 }
 
+const postFavorite = async (itemInfo) => {
+  try {
+    const token = localStorage.getItem('user')
+    const userId = localStorage.getItem('userId')
+    const { name, itemId } = itemInfo.item
+    const response = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_BACKEND}/favorites/`,
+      headers: { 'x-access-token': token },
+      data: {
+        item: {
+          name,
+          itemId
+        },
+        userId
+      }
+    })
+    return response.data
+  } catch (err) {
+    if (err.response.status === 401) {
+      logUserOut()
+    }
+  }
+}
+
+const deleteFavorite = async (itemId) => {
+  try {
+    const token = localStorage.getItem('user')
+    const response = await axios({
+      method: 'delete',
+      url: `${process.env.REACT_APP_BACKEND}/favorites/${itemId}`,
+      headers: { 'x-access-token': token }
+    })
+    return response.data
+  } catch (err) {
+    if (err.response.status === 401) {
+      logUserOut()
+    }
+  }
+}
+
 export const backendService = {
   getItems,
   postItem,
-  deleteItem,
+  postListItem,
+  deleteListItem,
   login,
   register,
   getFavorites,
-  getAutoCompleteData
+  getAutoCompleteData,
+  postFavorite,
+  deleteFavorite
 }

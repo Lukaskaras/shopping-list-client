@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { addItem } from '../../store/actions/shoppingListActions'
+import { addListItem, addItem } from '../../store/actions/shoppingListActions'
 import { connect } from 'react-redux'
 import Autocomplete from 'react-autocomplete'
 import { backendService } from '../../services/backendService'
@@ -16,7 +16,6 @@ class EnterItem extends Component {
     autoCompleteData: []
   }
   handleChange = async (e) => {
-    console.log('change')
     await this.setState({
       name: e.target.value
     })
@@ -28,8 +27,7 @@ class EnterItem extends Component {
     }
   }
 
-  handleSelect = (value, item) => {
-    console.log('selected')
+  handleSelect = (value) => {
     this.setState({
       name: value
     })
@@ -38,11 +36,18 @@ class EnterItem extends Component {
   handleSubmit = async (e) => {
     e.preventDefault()
     if (this.state.name.length > 1) {
+      if (this.props.listItems.some(listItem => listItem.item.name === this.state.name)) {
+        return
+      }
       const items = this.state.autoCompleteData
-      const item = items.find(item => item.name === this.state.name)
-      console.log('itema')
-      console.log(item)
+      let item
+      item = items.find(item => item.name === this.state.name)
+      if (!item) {
+        item = await this.props.addItem(this.state.name)
+        await this.props.addListItem(item)
+      } else {
       await this.props.addListItem(item)
+      }
       this.setState({ name: '' })
       await this.props.loadListItems()
     }
@@ -62,10 +67,10 @@ class EnterItem extends Component {
               getItemValue={(item) => item.name}
               items={this.state.autoCompleteData}
               renderItem={(item, isHighlighted) =>
-                  isHighlighted ? <div className="highlighted suggestion" style={{ background: '#ef5350' }}>
+                  isHighlighted ? <div className="highlighted suggestion" style={{ background: '#ef5350' }} key={item._id}>
                   {item.name}
                 </div> :
-                  <div className="suggestion" style={{ background: 'white'}}>
+                  <div className="suggestion" style={{ background: 'white'}} key={item._id}>
                   {item.name}
                   </div>
               }
@@ -78,7 +83,7 @@ class EnterItem extends Component {
                 style: {
                   borderBottomColor: '#ffcdd2',
                   paddingLeft: '15px',
-                  paddingRight: '15px'
+                  boxSizing: 'border-box'
                 }
               }}
             />
@@ -97,7 +102,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addListItem: (itemInfo) => dispatch(addItem(itemInfo))
+    addListItem: (itemInfo) => dispatch(addListItem(itemInfo)),
+    addItem: (itemName) => dispatch(addItem(itemName))
   }
 }
 
