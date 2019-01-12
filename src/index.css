@@ -7,7 +7,7 @@ body {
   background-color: #ffebee;
 }
 
-.shopping-list {
+.main-container {
   padding: 20px;
   margin-top: 20px;
 }
@@ -24,9 +24,14 @@ form button, form h5 {
 input[type=text]:not(.browser-default):focus:not([readonly]),
 input[type=email]:not(.browser-default):focus:not([readonly]),
 input[type=password]:not(.browser-default):focus:not([readonly]),
-textarea.materialize-textarea:focus:not([readonly]){
+textarea.materialize-textarea:focus:not([readonly]) {
     border-color: #424242;
     box-shadow: none;
+}
+
+input:not(.browser-default):focus:not([readonly]) {
+    border-bottom-color: #d9c41d;
+    box-shadow: 0px 1px #ef9a9a;
 }
 
 code {
@@ -40,4 +45,29 @@ i.icon-black {
 
 .submit-button {
     margin-top: 0px;
+}
+
+.favorites {
+    margin-top: 8.5px;
+}
+
+.enter-item {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.shopping-list-item::after {
+    display: inline-block;
+}
+
+.highlighted {
+    color: white;
+}
+
+.suggestion {
+    padding: 15px;
+}
+
+.autocomplete:focus {
+    border-bottom-color: #ffebee;
 }

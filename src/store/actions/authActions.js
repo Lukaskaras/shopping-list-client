@@ -17,7 +17,6 @@ export const login = (credentials) => {
       await backendService.login(credentials)
       dispatch({ type: 'LOGIN_SUCCESS'})
     } catch (err) {
-      console.log(err)
       dispatch({ type: 'LOGIN_ERROR', err})
     }
   }
