@@ -6,12 +6,24 @@ import { addFavorite, removeListItem, deleteFavorite } from '../../store/actions
 import { connect } from 'react-redux'
 import Favorites from './Favorites'
 
+
 class ShoppingList extends Component {
   state = {
     listItems: [],
     isListItemsLoading: false,
     favorites: [],
     isFavoritesLoading: false
+  }
+
+  redirectUnauthorized = () => {
+    const authenticatedUser = localStorage.getItem('user')
+    if (!authenticatedUser) {
+      this.props.history.push('/login')
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // this.redirectUnauthorized()
   }
 
   async componentDidMount() {
@@ -21,17 +33,33 @@ class ShoppingList extends Component {
   }
 
   async loadListItems() {
-    const listItems = await backendService.getItems()
-    this.setState({
-      listItems
-    })
+    try {
+      const res = await backendService.getItems()
+      const listItems = res.data
+      if (listItems) {
+        const listItems = res.data
+        this.setState({
+          listItems
+        })
+      }
+    } catch (error) {
+      this.redirectUnauthorized()
+    }
   }
 
   async loadFavorites() {
-    const favorites = await backendService.getFavorites()
-    this.setState({
-      favorites
-    })
+    try {
+      const response = await backendService.getFavorites()
+
+      if (response) {
+        const favorites = response.data
+        this.setState({
+          favorites
+        })
+      }
+    } catch (error) {
+      this.redirectUnauthorized()
+    }
   }
 
   handleClickDelete = async (itemId) => {
