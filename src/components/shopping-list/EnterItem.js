@@ -3,6 +3,7 @@ import { addListItem, addItem } from '../../store/actions/shoppingListActions'
 import { connect } from 'react-redux'
 import Autocomplete from 'react-autocomplete'
 import { backendService } from '../../services/backendService'
+import { Redirect, withRouter } from 'react-router-dom'
 
 class EnterItem extends Component {
   constructor () {
@@ -15,15 +16,35 @@ class EnterItem extends Component {
     userId: '',
     autoCompleteData: []
   }
+
+  redirectUnauthorized = () => {
+    const authenticatedUser = localStorage.getItem('user')
+    if (!authenticatedUser) {
+      this.props.history.push('/login')
+    }
+  }
+
+  addListItem = async (item) => {
+    await this.props.addListItem(item)
+    this.redirectUnauthorized()
+  }
+
   handleChange = async (e) => {
     await this.setState({
       name: e.target.value
     })
     if (this.state.name.length > 2) {
-      const data = await backendService.getAutoCompleteData(this.state.name)
-      await this.setState({
-        autoCompleteData: data
-      })
+      try {
+        const response = await backendService.getAutoCompleteData(this.state.name)
+        const {data} = response
+        if (data) {
+          await this.setState({
+            autoCompleteData: data
+          })
+        }
+      } catch (error) {
+        this.redirectUnauthorized(error)
+      }
     }
   }
 
@@ -36,17 +57,23 @@ class EnterItem extends Component {
   handleSubmit = async (e) => {
     e.preventDefault()
     if (this.state.name.length > 1) {
+
       if (this.props.listItems.some(listItem => listItem.item.name === this.state.name)) {
         return
       }
+
       const items = this.state.autoCompleteData
       let item
       item = items.find(item => item.name === this.state.name)
       if (!item) {
-        item = await this.props.addItem(this.state.name)
-        await this.props.addListItem(item)
+        const res = await this.props.addItem(this.state.name)
+        const { data } = res
+        if (!data) {
+          this.redirectUnauthorized()
+        }
+        await this.addListItem(res.data)
       } else {
-      await this.props.addListItem(item)
+        await this.addListItem(item)
       }
       this.setState({ name: '' })
       await this.props.loadListItems()
@@ -54,6 +81,11 @@ class EnterItem extends Component {
   }
 
   render () {
+    const authenticatedUser = localStorage.getItem('user')
+    if (!authenticatedUser) {
+      return <Redirect to='/login'/>
+    }
+
     return (
       <div className="row enter-item">
         <form className="white z-depth-1" onSubmit={this.handleSubmit}>
@@ -103,4 +135,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EnterItem)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EnterItem))

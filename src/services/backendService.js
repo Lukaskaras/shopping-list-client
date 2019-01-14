@@ -5,175 +5,89 @@ const logUserOut = () => {
   localStorage.removeItem('userId')
 }
 
-const getItems = async () => {
-  try {
-    const token = localStorage.getItem('user')
-    const userId = localStorage.getItem('userId')
-    const response =  await axios({
-      method: 'get',
-      url: `${process.env.REACT_APP_BACKEND}/list-items/${userId}`,
-      headers: { 'x-access-token': token }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-      logUserOut()
-    }
+const agent = async (method, path, data = {}) => {
+  const token = localStorage.getItem('user')
+  return await axios ({
+    method,
+    url: `${process.env.REACT_APP_BACKEND}/${path}`,
+    headers: { 'x-access-token': token },
+    data
+  })
+}
+
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  console.log(error)
+  const { response } = error
+  if (response.status === 401) {
+    logUserOut()
   }
+  return Promise.reject(error)
+})
+
+const getItems = async () => {
+  const userId = localStorage.getItem('userId')
+  return await agent('get', `list-items/${userId}`)
 }
 
 const getAutoCompleteData = async (query) => {
-  try {
-    const token = localStorage.getItem('user')
-    const response = await axios({
-      method: 'get',
-      url: `${process.env.REACT_APP_BACKEND}/items/search?query=${query}`,
-      headers: { 'x-access-token': token }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-      logUserOut()
-    }
-  }
+  return await agent('get', `items/search?query=${query}`)
 }
 
 const postItem = async (name) => {
-  try {
-    const token = localStorage.getItem('user')
-    const response = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_BACKEND}/items`,
-      headers: { 'x-access-token': token },
-      data: { name }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-      logUserOut()
-    }
-  }
+  return await agent('post', 'items', { name })
 }
 
 const postListItem = async (itemInfo) => {
-  try {
-    const token = localStorage.getItem('user')
-    const userId = localStorage.getItem('userId')
-    const { name, _id, quantity } = itemInfo
-    const response = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_BACKEND}/list-items/`,
-      headers: { 'x-access-token': token },
-      data: {
-        item: {
-          name,
-          itemId: _id
-        },
-        userId,
-        quantity
-      }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-      logUserOut()
-    }
+  const userId = localStorage.getItem('userId')
+  const { name, _id, quantity} = itemInfo
+  const data = {
+    item: {
+      name,
+      itemId: _id
+    },
+    userId,
+    quantity
   }
+  return await agent('post', 'list-items', data)
 }
 
 const deleteListItem = async (itemId) => {
-  try {
-    const token = localStorage.getItem('user')
-    const response = await axios({
-      method: 'delete',
-      url: `${process.env.REACT_APP_BACKEND}/list-items/${itemId}`,
-      headers: { 'x-access-token': token }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-     logUserOut()
-    }
-  }
+  return await agent('delete', `list-items/${itemId}`)
 }
 
 const login = async (credentials) => {
-  const response = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_BACKEND}/users/login`,
-      data: credentials,
-      headers: {'Content-Type': 'application/json'}
-  })
+  const response = await agent('post', 'users/login', credentials)
   localStorage.setItem('user', response.data.token)
   localStorage.setItem('userId', response.data.userId)
   return response
 }
 
 const register = async (credentials) => {
-  return await axios({
-    method: 'post',
-    url: `${process.env.REACT_APP_BACKEND}/users/register`,
-    data: credentials,
-    headers: {'Content-Type': 'application/json'}
-  })
+  return await agent('post', 'users/register', credentials)
 }
 
 const getFavorites = async () => {
-  try {
-    const token = localStorage.getItem('user')
-    const userId = localStorage.getItem('userId')
-    const response =  await axios({
-      method: 'get',
-      url: `${process.env.REACT_APP_BACKEND}/favorites/${userId}`,
-      headers: { 'x-access-token': token }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-      logUserOut()
-    }
-  }
+  const userId = localStorage.getItem('userId')
+  return await agent('get', `favorites/${userId}`)
 }
 
 const postFavorite = async (itemInfo) => {
-  try {
-    const token = localStorage.getItem('user')
-    const userId = localStorage.getItem('userId')
-    const { name, itemId } = itemInfo.item
-    const response = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_BACKEND}/favorites/`,
-      headers: { 'x-access-token': token },
-      data: {
-        item: {
-          name,
-          itemId
-        },
-        userId
-      }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-      logUserOut()
-    }
+  const userId = localStorage.getItem('userId')
+  const { name, itemId } = itemInfo.item
+  const data = {
+    item: {
+      name,
+      itemId
+    },
+    userId
   }
+  return await agent('post', 'favorites', data)
 }
 
 const deleteFavorite = async (itemId) => {
-  try {
-    const token = localStorage.getItem('user')
-    const response = await axios({
-      method: 'delete',
-      url: `${process.env.REACT_APP_BACKEND}/favorites/${itemId}`,
-      headers: { 'x-access-token': token }
-    })
-    return response.data
-  } catch (err) {
-    if (err.response.status === 401) {
-      logUserOut()
-    }
-  }
+  return await agent('delete', `favorites/${itemId}`)
 }
 
 export const backendService = {

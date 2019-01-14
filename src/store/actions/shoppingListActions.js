@@ -3,10 +3,13 @@ import { backendService } from '../../services/backendService'
 export const addListItem = (itemInfo) => {
   return async (dispatch) => {
     try {
-      await backendService.postListItem(itemInfo)
+      const response = await backendService.postListItem(itemInfo)
       dispatch({ type: 'LIST_ITEM_ADDED'})
-    } catch {
+      return response
+    } catch (error) {
       dispatch({ type: 'LIST_ITEM_ADD_ERROR'})
+      console.log(error)
+      return error
     }
   }
 }
@@ -17,8 +20,9 @@ export const addItem = (itemName) => {
       const response = await backendService.postItem(itemName)
       dispatch({ type: 'ITEM_ADDED' })
       return response
-    } catch {
+    } catch (error) {
       dispatch({ type: 'ITEM_ADD_ERROR'})
+      return error
     }
   }
 }
@@ -26,10 +30,12 @@ export const addItem = (itemName) => {
 export const removeListItem = (itemId) => {
   return async (dispatch) => {
     try {
-      await backendService.deleteListItem(itemId)
+      const response = await backendService.deleteListItem(itemId)
       dispatch({ type: 'ITEM_DELETED'})
-    } catch {
+      return response
+    } catch (error) {
       dispatch({ type: 'ITEM_DELETE_ERROR'})
+      return error
     }
   }
 }
