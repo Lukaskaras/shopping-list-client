@@ -117,7 +117,7 @@ class EnterItem extends Component {
               />
               </div>
             <div className="col l1 m2 s2" id="submit">
-              <a class="btn-floating waves-effect waves-light red lighten-1" onClick={this.handleSubmit}><i class="material-icons">add</i></a>
+              <a className="btn-floating waves-effect waves-light red lighten-1" onClick={this.handleSubmit}><i className="material-icons">add</i></a>
             </div>
             </div>
         </form>
