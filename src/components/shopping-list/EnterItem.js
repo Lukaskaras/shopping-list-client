@@ -89,32 +89,36 @@ class EnterItem extends Component {
     return (
       <div className="row enter-item">
         <form className="white z-depth-1" onSubmit={this.handleSubmit}>
-          <div className="row">
-            <Autocomplete
-              className="autocomplete"
-              getItemValue={(item) => item.name}
-              items={this.state.autoCompleteData}
-              renderItem={(item, isHighlighted) =>
-                  isHighlighted ? <div className="highlighted suggestion" style={{ background: '#ef5350' }} key={item._id}>
-                  {item.name}
-                </div> :
-                  <div className="suggestion" style={{ background: 'white'}} key={item._id}>
-                  {item.name}
-                  </div>
-              }
-              shouldItemRender={(item, value) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1}
-              value={this.state.name}
-              onChange={this.handleChange}
-              wrapperStyle={{display: 'block'}}
-              onSelect={this.handleSelect}
-              inputProps={{
-                style: {
-                  borderBottomColor: '#ffcdd2',
-                  paddingLeft: '15px',
-                  boxSizing: 'border-box'
+          <div className="row without-after">
+            <div className="col l11 m10 s10">
+              <Autocomplete
+                getItemValue={(item) => item.name}
+                items={this.state.autoCompleteData}
+                renderItem={(item, isHighlighted) =>
+                    isHighlighted ? <div className="highlighted suggestion" style={{ background: '#ef5350' }} key={item._id}>
+                    {item.name}
+                  </div> :
+                    <div className="suggestion" style={{ background: 'white'}} key={item._id}>
+                    {item.name}
+                    </div>
                 }
-              }}
-            />
+                shouldItemRender={(item, value) => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1}
+                value={this.state.name}
+                onChange={this.handleChange}
+                wrapperStyle={{display: 'block'}}
+                onSelect={this.handleSelect}
+                inputProps={{
+                  style: {
+                    borderBottomColor: '#ffcdd2',
+                    paddingLeft: '15px',
+                    boxSizing: 'border-box'
+                  }
+                }}
+              />
+              </div>
+            <div className="col l1 m2 s2" id="submit">
+              <a class="btn-floating waves-effect waves-light red lighten-1" onClick={this.handleSubmit}><i class="material-icons">add</i></a>
+            </div>
             </div>
         </form>
       </div>
