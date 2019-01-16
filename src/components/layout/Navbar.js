@@ -5,13 +5,14 @@ import LoggedOutLinks from './LoggedOutLinks'
 import M from 'materialize-css'
 
 class Navbar extends Component {
-  componentDidMount() {
+  componentDidUpdate() {
     const elem = document.querySelector('.sidenav')
     M.Sidenav.init(elem, {
       edge: "left",
       inDuration: 250
     })
   }
+
 
   render() {
     const authenticatedUser = localStorage.getItem('user')
