@@ -5,10 +5,16 @@ import { connect } from 'react-redux'
 
 const LoggedInLinks = (props) => {
   return(
-    <ul className="right">
-      <li><a href="#" onClick={props.logout}>Log Out</a></li>
-      <li><NavLink to='/'>User</NavLink></li>
-    </ul>
+    <div>
+      <ul className="right hide-on-med-and-down">
+        <li><a href="#" onClick={props.logout}>Log Out</a></li>
+        <li><NavLink to='/'>User</NavLink></li>
+      </ul>
+      <ul className="sidenav" id="mobile-links">
+        <li><a href="#" className="sidenav-close" onClick={props.logout}>Log Out</a></li>
+        <li><NavLink to='/' className="sidenav-close">User</NavLink></li>
+      </ul>
+    </div>
   )
 }
 

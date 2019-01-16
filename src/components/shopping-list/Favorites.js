@@ -28,16 +28,16 @@ class Favorites extends Component {
 
     const favorites = this.props.favorites.length ? this.props.favorites.map(favorite => {
       return(
-        <li className="collection-item row item" key={ favorite.item.itemId }>
-          <div className="col s2">
+        <li className="collection-item row item favorite-item" key={ favorite.item.itemId }>
+          <div className="col l2 m3 s1 add-fav-to-list">
             <a href="javascript:void(0)" onClick={() => this.handleAddClick(favorite)}>
               <i className="material-icons icon-black">add_circle</i>
             </a>
           </div>
-          <div className="col s8">
+          <div className="col l8 m6 s9">
             <span>{favorite.item.name}</span>
           </div>
-          <div className="col s1">
+          <div className="col l1 m3 s2">
             <a href="javascript:void(0)" onClick={() => this.handleDeleteClick(favorite)}>
               <i className="material-icons icon-black">delete</i>
             </a>
