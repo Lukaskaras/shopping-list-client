@@ -99,14 +99,16 @@ class ShoppingList extends Component {
         <i className="material-icons icon-black">star_border</i>
       return(
         <li className="collection-item row item" key={ listItem._id }>
-          <div className="col s1">
+          <div className="col s2 m1">
             <a href="javascript:void(0)" onClick={() => this.handleClickStar(listItem)}>
               { icon }
             </a>
           </div>
-          <div className="col s11">
+          <div className="col s8 m10">
             <span>{listItem.item.name}</span>
-            <a href="javascript:void(0)" className="secondary-content" onClick={() => this.handleClickDelete(listItem._id)} >
+          </div>
+          <div className="col s1 m1">
+            <a href="javascript:void(0)" onClick={() => this.handleClickDelete(listItem._id)} >
               <i className="material-icons icon-black">delete</i>
             </a>
           </div>
